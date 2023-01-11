@@ -5,7 +5,9 @@ class Sprite {
         frames = {max: 1, hold: 10}, 
         sprites, 
         animate = false,
-        isEnemy = false
+        isEnemy = false,
+        rotation = 0,
+        name
     }) {
         this.position = position,
         this.image = image
@@ -20,10 +22,15 @@ class Sprite {
         this.opacity = 1
         this.health = 100
         this.isEnemy = isEnemy
+        this.rotation = rotation
+        this.name = name
     }
 
     draw() {
         c.save()
+        c.translate(this.position.x + this.width / 2, this.position.y + this.height / 2)
+        c.rotate(this.rotation)
+        c.translate(-this.position.x - this.width / 2, -this.position.y - this.height / 2)
         c.globalAlpha = this.opacity
         //c.drawImage(this.image, this.position.x, this.position.y)
         c.drawImage(
@@ -49,45 +56,102 @@ class Sprite {
             }
     }
 
-    attack({attack, recipient}) {
-        const tl = gsap.timeline()
-
-        this.health -= attack.damage
-
-        let movementDistance = 20
-        if (this.isEnemy) movementDistance = -20
+    attack({attack, recipient, renderedSprites}) {
+        document.querySelector('#dialogueBox').style.display = 'block'
+        document.querySelector('#dialogueBox').innerHTML = this.name + ' used ' + attack.name
 
         let healthBar = '#enemyHealth'
         if (this.isEnemy) healthBar = '#playerHealth'
+        
+        let rotation = 1
+        if (this.isEnemy) rotation = -2.2
 
-        tl.to(this.position, {
-            x: this.position.x - movementDistance,
-        }).to(this.position, {
-            x: this.position.x + movementDistance * 2,
-            duration: 0.1,
-            onComplete: () => {
-                //enemy gets hit
-                gsap.to(healthBar, {
-                    width: this.health + '%'
+        this.health -= attack.damage
+
+        switch (attack.name) {
+            case 'Ember':
+                const emberImage = new Image()
+                emberImage.src = './img/fireball.png'
+
+                const ember = new Sprite({
+                    position: {
+                        x: this.position.x,
+                        y: this.position.y
+                    },
+                    image: emberImage,
+                    frames: {
+                        max: 4,
+                        hold: 10
+                    },
+                    animate: true,
+                    rotation
                 })
 
-                gsap.to(recipient.position, {
-                    x: recipient.position.x + 10,
-                    yoyo: true,
-                    repeat: 5,
-                    duration: 0.08,
-                })
+                renderedSprites.splice(1, 0, ember)
 
-                gsap.to(recipient, {
-                    opacity: 0,
-                    repeat: 5,
-                    yoyo: true,
-                    duration: 0.08
+                gsap.to(ember.position, {
+                    x: recipient.position.x,
+                    y: recipient.position.y,
+                    onComplete: () => {
+                        //enemy gets hit
+                        gsap.to(healthBar, {
+                            width: this.health + '%'
+                        })
+        
+                        gsap.to(recipient.position, {
+                            x: recipient.position.x + 10,
+                            yoyo: true,
+                            repeat: 5,
+                            duration: 0.08,
+                        })
+        
+                        gsap.to(recipient, {
+                            opacity: 0,
+                            repeat: 5,
+                            yoyo: true,
+                            duration: 0.08
+                        })
+
+                        renderedSprites.splice(1, 1)
+                    }
                 })
-            }
-        }).to(this.position, {
-            x: this.position.x
-        })
+                break;
+            case 'Tackle':
+                const tl = gsap.timeline()
+        
+                let movementDistance = 20
+                if (this.isEnemy) movementDistance = -20
+
+                tl.to(this.position, {
+                    x: this.position.x - movementDistance,
+                }).to(this.position, {
+                    x: this.position.x + movementDistance * 2,
+                    duration: 0.1,
+                    onComplete: () => {
+                        //enemy gets hit
+                        gsap.to(healthBar, {
+                            width: this.health + '%'
+                        })
+        
+                        gsap.to(recipient.position, {
+                            x: recipient.position.x + 10,
+                            yoyo: true,
+                            repeat: 5,
+                            duration: 0.08,
+                        })
+        
+                        gsap.to(recipient, {
+                            opacity: 0,
+                            repeat: 5,
+                            yoyo: true,
+                            duration: 0.08
+                        })
+                    }
+                }).to(this.position, {
+                    x: this.position.x
+                })
+                break;
+        }
     }
 }
 
