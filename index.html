@@ -39,10 +39,13 @@
                 left: 0; 
                 opacity: 0; 
                 pointer-events: none;
+                z-index: 10;
             ">
         </div>
-        <!-- Represents enemy health bar-->
-        <div style="
+        <canvas></canvas>
+        <div id="userInterface">
+            <!-- Represents enemy health bar-->
+            <div style="
             background-color: white; 
             width: 250px; 
             position: absolute; 
@@ -56,67 +59,65 @@
                 <div style="background-color: #bbb; height: 5px; margin-top: 10px;"></div>
                 <div id="enemyHealth" style="background-color: green; height: 5px; position: absolute; top: 0; left: 0; right: 0;"></div>
             </div>
-        </div>
-         <!-- Represents player health bar-->
-        <div style="
-        background-color: white; 
-        width: 250px; 
-        position: absolute; 
-        bottom: 180px; 
-        right: 50px; 
-        border: 4px solid;
-        padding: 12px;
-        ">
-        <h1>Emby</h1>
-        <div style="position: relative;">
-            <div style="background-color: #bbb; height: 5px; margin-top: 10px;"></div>
-            <div id="playerHealth" style="background-color: green; height: 5px; position: absolute; top: 0; left: 0; right: 0;"></div>
-        </div>
-    </div>
-        <canvas></canvas>
-        <div 
-            style="
+            </div>
+            <!-- Represents player health bar-->
+            <div style="
                 background-color: white; 
-                height: 140px; 
+                width: 250px; 
                 position: absolute; 
-                bottom: 0; 
-                left: 0; 
-                right: 0;
-                border-top: 4px solid;
-                display: flex;
-            ">
+                bottom: 180px; 
+                right: 50px; 
+                border: 4px solid;
+                padding: 12px;
+                ">
+                <h1>Emby</h1>
+                <div style="position: relative;">
+                    <div style="background-color: #bbb; height: 5px; margin-top: 10px;"></div>
+                    <div id="playerHealth" style="background-color: green; height: 5px; position: absolute; top: 0; left: 0; right: 0;"></div>
+                </div>
+            </div>
+
             <div 
-                id="dialogueBox"
                 style="
-                    position: absolute; 
-                    top: 0; 
-                    left: 0; 
-                    bottom: 0; 
-                    right: 0; 
                     background-color: white; 
-                    padding: 12px;
-                    display: none;
-                    cursor: pointer;
-            ">
-                textdkoskpoasodk
-            </div>
-            <div style="width: 66.66%; display: grid; grid-template-columns: repeat(2, 1fr);">
-                <button>Ember</button>
-                <button>Tackle</button>
-                <button>-</button>
-                <button>-</button>
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center; width: 33.33%; border-left: 4px solid;">
-                <h1>Attack Type</h1>
+                    height: 140px; 
+                    position: absolute; 
+                    bottom: 0; 
+                    left: 0; 
+                    right: 0;
+                    border-top: 4px solid;
+                    display: flex;
+                ">
+                <div 
+                    id="dialogueBox"
+                    style="
+                        position: absolute; 
+                        top: 0; 
+                        left: 0; 
+                        bottom: 0; 
+                        right: 0; 
+                        background-color: white; 
+                        padding: 12px;
+                        display: none;
+                        cursor: pointer;
+                ">
+                    
+                </div>
+                <div id="attacksBox" style="width: 66.66%; display: grid; grid-template-columns: repeat(2, 1fr);"></div>
+                <div style="display: flex; align-items: center; justify-content: center; width: 33.33%; border-left: 4px solid;">
+                    <h1 id="attackType">Attack Type</h1>
+                </div>
             </div>
         </div>
     </div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js" integrity="sha512-f8mwTB+Bs8a5c46DEm7HQLcJuHMBaH/UFlcgyetMqqkvTcYg4g5VXsYR71b3qC82lZytjNYvBj2pf0VekA9/FQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="data/audio.js"></script>
 <script src="data/battleZones.js"></script>
 <script src="data/collisions.js"></script>
 <script src="data/attacks.js"></script>
+<script src="data/monsters.js"></script>
 <script src="classes.js"></script>
 <script src="index.js"></script>
 <script src="battleScene.js"></script>
