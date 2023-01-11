@@ -167,6 +167,10 @@ function animate() {
                     //deactivate animation loop
                     window.cancelAnimationFrame(animationId)
 
+                    audio.Map.stop()
+                    audio.initBattle.play()
+                    audio.battle.play()
+
                     battle.initiated = true
                     gsap.to('#overlappingDiv', {
                         opacity: 1,
@@ -281,7 +285,6 @@ function animate() {
             if (moving) movables.forEach(movable => {movable.position.x -= 3})
     }
 }
-//animate()
 
 let lastKey = ''
 window.addEventListener('keydown', (e) => {
@@ -324,6 +327,14 @@ window.addEventListener('keyup', (e) => {
         case 'w':
             keys.w.pressed = false
             break;        
+    }
+})
+
+let clicked = false
+addEventListener('click', () => {
+    if(!clicked) {
+        audio.Map.play()
+        clicked = true
     }
 })
 

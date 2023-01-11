@@ -87,6 +87,8 @@ class Monster extends Sprite {
         gsap.to(this, {
             opacity: 0
         })
+        audio.battle.stop()
+        audio.victory.play()
     }
 
     attack({attack, recipient, renderedSprites}) {
@@ -103,6 +105,7 @@ class Monster extends Sprite {
 
         switch (attack.name) {
             case 'Ember':
+                audio.initEmber.play()
                 const emberImage = new Image()
                 emberImage.src = './img/fireball.png'
 
@@ -127,6 +130,7 @@ class Monster extends Sprite {
                     y: recipient.position.y,
                     onComplete: () => {
                         //enemy gets hit
+                        audio.emberHit.play()
                         gsap.to(healthBar, {
                             width: recipient.health + '%'
                         })
@@ -162,6 +166,7 @@ class Monster extends Sprite {
                     duration: 0.1,
                     onComplete: () => {
                         //enemy gets hit
+                        audio.tackleHit.play()
                         gsap.to(healthBar, {
                             width: recipient.health + '%'
                         })
@@ -197,7 +202,7 @@ class Boundary {
     }
 
     draw() {
-        c.fillStyle = 'rgba(255, 0, 0, 0.3)'
+        c.fillStyle = 'rgba(255, 0, 0, 0)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
